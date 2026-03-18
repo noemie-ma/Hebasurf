@@ -1,4 +1,7 @@
 {
+    "engines": {
+        "node": "20.x"
+    },
     "functions": {
         "api/**/*.php": {
             "runtime": "vercel-php@0.7.0"
