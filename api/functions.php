@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 define('USERS_FILE', __DIR__ . '/data/users.json');
 define('FILES_FILE', __DIR__ . '/data/files.json');
