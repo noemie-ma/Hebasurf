@@ -1,7 +1,7 @@
 <?php
 require_once 'functions.php';
-
 requireLogin();
+
 $userEmail = $_SESSION['user_email'];
 $userFiles = getUserFiles($userEmail);
 
