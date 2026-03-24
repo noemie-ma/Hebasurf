@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?> Imgshare </title>
+    <!-- Polices auto-hébergées (place les fichiers de police dans api/fonts/) -->
+    <link rel="stylesheet" href="fonts.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -16,6 +18,3 @@
             <a href="logout.php" class="nav-link">Se déconnecter</a>
         </nav>
     </header>
-</body>
-
-</html>

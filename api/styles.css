@@ -1,49 +1,323 @@
-/* style.css */
+/* Hebasurf — Direction artistique « Surf » */
 
 :root {
-  --primary-color: #075985; /* Deep Ocean */
-  --secondary-color: #f0f9ff; /* Écume */
-  --accent-color: #fbbf24; /* Sunset Gold */
-  --text-color: #1f2937;
-  --title-font: "Righteous", sans-serif;
-  --body-font: "Inter", sans-serif;
+  --ocean-900: #013a63;
+  --ocean-700: #05668d;
+  --foam: #f4fbff;
+  --sand: #f6e6c3;
+  --sunset: #ffb24d;
+  --coral: #ff6b6b;
+  --text: #0f172a;
+  --muted: #6b7280;
+  --radius-lg: 12px;
 }
 
+/* Base */
+* {
+  box-sizing: border-box;
+}
+html,
 body {
-  background-color: var(--secondary-color);
-  color: var(--text-color);
-  font-family: var(--body-font);
+  height: 100%;
   margin: 0;
+  background: linear-gradient(180deg, var(--foam) 0%, #eaf6ff 60%);
+  color: var(--text);
+  font-family:
+    "InterLocal",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2,
-.logo {
-  font-family: var(--title-font);
-  color: var(--primary-color);
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  background: linear-gradient(
+    90deg,
+    rgba(1, 58, 99, 0.95),
+    rgba(5, 102, 141, 0.95)
+  );
+  color: var(--foam);
+}
+.header h1 {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+}
+.nav {
+  display: flex;
+  gap: 12px;
+}
+.nav-link {
+  color: var(--foam);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  opacity: 0.95;
+}
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--sand);
 }
 
-.btn-upload {
-  background-color: var(--primary-color);
-  color: white;
-  border-radius: 50px; /* Bords très arrondis style planche */
-  padding: 10px 20px;
-  transition: background-color 0.3s ease;
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: 34px auto;
+  padding: 24px;
+}
+
+/* Cards / panels */
+.card {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(250, 250, 250, 0.9)
+  );
+  border-radius: var(--radius-lg);
+  box-shadow: 0 6px 20px rgba(4, 27, 54, 0.08);
+  padding: 18px;
+}
+
+/* Upload form */
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.file-input-label {
+  display: inline-block;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px dashed rgba(5, 102, 141, 0.25);
+  background: linear-gradient(180deg, rgba(5, 102, 141, 0.03), transparent);
+  cursor: pointer;
+  color: var(--ocean-700);
+}
+.file-input-label input[type="file"] {
+  display: none;
+}
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--sunset);
+  color: #07263a;
+  padding: 10px 16px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
+  font-weight: 600;
+}
+.upload-button svg {
+  opacity: 0.9;
+}
+.upload-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(3, 50, 73, 0.12);
 }
 
-.btn-upload:hover {
-  background-color: var(--accent-color);
+.upload-info {
+  color: var(--muted);
+  font-size: 0.95rem;
 }
 
-.nav-link {
-  color: var(--text-color);
+/* Form groups and messages */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="text"],
+textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e6f3fb;
+  background: transparent;
+}
+.error-message {
+  color: var(--coral);
+  background: rgba(255, 107, 107, 0.06);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 107, 107, 0.12);
+}
+.success-message {
+  color: #064e3b;
+  background: rgba(16, 185, 129, 0.06);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.12);
+}
+
+/* File input wrapper (keeps spacing) */
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+/* User nav / small links */
+.user-nav {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.user-nav a {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--ocean-700);
   text-decoration: none;
-  margin-right: 15px;
 }
 
-.nav-link:hover {
-  color: var(--primary-color);
-  border-bottom: 2px solid var(--accent-color); /* Un petit souligné Sunset */
+/* Empty state */
+.no-files {
+  color: var(--muted);
+  padding: 12px;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 250, 250, 0.6),
+    rgba(250, 250, 250, 0.4)
+  );
+  border-radius: 10px;
 }
+
+/* Profile */
+.current-email {
+  font-weight: 600;
+  color: var(--ocean-700);
+  margin-bottom: 8px;
+}
+
+/* Links */
+.back-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--ocean-700);
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+
+/* Small tweaks for action links */
+.actions a {
+  font-weight: 600;
+}
+.delete-link {
+  background: transparent;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+/* Table list */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+th,
+td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eef6fb;
+}
+th {
+  color: var(--ocean-900);
+  font-weight: 700;
+}
+td .actions a {
+  margin-right: 10px;
+  color: var(--ocean-700);
+  text-decoration: none;
+}
+td .actions a.delete-link {
+  color: var(--coral);
+}
+
+/* Badges and small UI */
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--ocean-700);
+  color: var(--foam);
+  font-size: 0.85rem;
+}
+
+/* Footer */
+.footer {
+  margin-top: 28px;
+  padding: 18px 28px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .container {
+    padding: 16px;
+  }
+  .header {
+    padding: 12px;
+  }
+  .nav {
+    display: none;
+  }
+  table th,
+  table td {
+    padding: 10px 6px;
+  }
+}
+
+/* Tiny surfy accents */
+.wave-emoji {
+  font-size: 1.3rem;
+  margin-right: 6px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo img {
+  height: 34px;
+  width: auto;
+  border-radius: 6px;
+}
+
+/* Accessibility focus */
+a:focus,
+button:focus,
+input:focus {
+  outline: 3px solid rgba(5, 102, 141, 0.18);
+  outline-offset: 3px;
+}
+
+/* Optional: dark-mode helper */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foam: #071226;
+    --ocean-900: #8bd3ff;
+    --ocean-700: #66b8ff;
+    --sand: #2b2f33;
+  }
+  body {
+    background: linear-gradient(180deg, #021427 0%, #021b2a 100%);
+    color: #e6f7ff;
+  }
+}
+
+/* End of DA surf */

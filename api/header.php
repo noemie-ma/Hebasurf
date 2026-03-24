@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?> Hebasurf </title>
-    <link rel="stylesheet" href="api/styles.css">
+    <!-- Polices auto-hébergées (place les fichiers de police dans api/fonts/) -->
+    <link rel="stylesheet" href="fonts.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -16,4 +18,3 @@
             <a href="inscription.php" class="nav-link">S'inscrire</a>
         </nav>
     </header>
-</body>
