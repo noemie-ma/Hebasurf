@@ -16,3 +16,6 @@
             <a href="logout.php" class="nav-link">Se déconnecter</a>
         </nav>
     </header>
+</body>
+
+</html>
