@@ -26,11 +26,11 @@ if (strtolower($targetFile['owner']) !== strtolower($userEmail)) {
     die("Vous n'êtes pas autorisé à supprimer ce fichier.");
 }
 
-// Suppression du fichier physique
+// Suppression du fichier physique — si présent sur le filesystem temporaire
 $userFolder = generateUserFolder($targetFile['owner']);
-$filepath = $userFolder . '/' . $targetFile['stored_name'];
+$filepath = rtrim($userFolder, '/') . '/' . $targetFile['stored_name'];
 if (file_exists($filepath)) {
-    unlink($filepath);
+    @unlink($filepath);
 }
 
 // Suppression des métadonnées

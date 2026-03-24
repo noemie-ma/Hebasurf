@@ -19,20 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (findUserByEmail($newEmail)) {
             $error = "Cette adresse email est déjà utilisée.";
         } else {
-            // Mise à jour de l’utilisateur et déplacement du dossier d’uploads
-            $oldFolder = generateUserFolder($currentEmail);
-            $newFolder = generateUserFolder($newEmail);
-            if (!file_exists($newFolder)) {
-                mkdir($newFolder, 0755, true);
-            }
-            if (file_exists($oldFolder)) {
-                foreach (scandir($oldFolder) as $file) {
-                    if ($file === '.' || $file === '..')
-                        continue;
-                    rename($oldFolder . '/' . $file, $newFolder . '/' . $file);
-                }
-                rmdir($oldFolder);
-            }
+            // Mise à jour de l’utilisateur. Pas de déplacement physique des fichiers (environnement sans stockage persistant)
             updateUser($currentEmail, ['email' => $newEmail]);
 
             // Mise à jour des métadonnées de fichiers (propriété et réservation)

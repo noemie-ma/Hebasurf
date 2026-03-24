@@ -27,8 +27,9 @@ if (!(strtolower($targetFile['owner']) === strtolower($userEmail) || (isset($tar
 }
 
 // Recherche du fichier sur le serveur
+// Emplacement sur le filesystem temporaire (ou stockage externe si configuré)
 $userFolder = generateUserFolder($targetFile['owner']);
-$filepath = $userFolder . '/' . $targetFile['stored_name'];
+$filepath = rtrim($userFolder, '/') . '/' . $targetFile['stored_name'];
 if (!file_exists($filepath)) {
     die("Fichier introuvable sur le serveur.");
 }

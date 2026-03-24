@@ -1,11 +1,7 @@
 <?php
 // Definition d'une constantes pour les fichiers enregistrés
-define('UPLOADS_DIR', __DIR__ . '/uploads');
-
-// Crée le dossier d'uploads si nécessaire
-if (!file_exists(UPLOADS_DIR)) {
-    mkdir(UPLOADS_DIR, 0755, true);
-}
+// Sur Vercel, le filesystem n'est pas persistant; utiliser le dossier temporaire système
+define('UPLOADS_DIR', sys_get_temp_dir());
 
 // Connexion à la database sur Vercel
 function get_db_connection()
@@ -182,7 +178,6 @@ function updateUser($currentEmail, $fields)
 // Génère le chemin du dossier utilisateur à partir de son email
 function generateUserFolder($email)
 {
-    $safe = preg_replace('/[^a-z0-9._-]/i', '_', strtolower(trim($email)));
-    $folder = UPLOADS_DIR . '/' . $safe;
-    return $folder;
+    // Pour Vercel et environnements sans stockage persistant, stocker dans le répertoire temporaire
+    return UPLOADS_DIR;
 }

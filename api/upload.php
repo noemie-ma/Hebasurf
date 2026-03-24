@@ -30,10 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $newFileName = uniqid() . '.' . $extension;
                 $userEmail = $_SESSION['user_email'];
                 $userFolder = generateUserFolder($userEmail);
-                if (!file_exists($userFolder)) {
-                    mkdir($userFolder, 0755, true);
-                }
-                $destination = $userFolder . '/' . $newFileName;
+                $destination = rtrim($userFolder, '/') . '/' . $newFileName;
                 if (move_uploaded_file($file['tmp_name'], $destination)) {
                     $metadata = array(
                         'id' => uniqid(),
