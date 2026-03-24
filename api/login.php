@@ -1,10 +1,12 @@
 <?php
 require_once 'functions.php';
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $title = 'Se connecter';
 require_once 'header.php';
-if (session_status() === PHP_SESSION_NONE)
-    session_start();
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
