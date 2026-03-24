@@ -1,7 +1,9 @@
 <?php
-require_once 'header-logged.php';
 require_once 'functions.php';
 requireLogin();
+
+$title = 'Modifier le profil';
+require_once 'header-logged.php';
 
 $error = '';
 $success = '';
@@ -63,48 +65,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
+<div class="container">
+    <h1>Modifier le profil</h1>
+    <p class="current-email">Email actuel: <?php echo htmlspecialchars($currentEmail); ?></p>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Modifier le profil</title>
-</head>
+    <?php if ($error): ?>
+        <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+    <?php endif; ?>
 
-<body>
-    <div class="container">
-        <h1>Modifier le profil</h1>
-        <p class="current-email">Email actuel: <?php echo htmlspecialchars($currentEmail); ?></p>
+    <?php if ($success): ?>
+        <p class="success-message"><?php echo htmlspecialchars($success); ?></p>
+    <?php endif; ?>
 
-        <?php if ($error): ?>
-            <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
-        <?php endif; ?>
+    <form method="post">
+        <div class="form-group">
+            <label>Nouvel email:</label>
+            <input type="email" name="email" value="<?php echo htmlspecialchars($currentEmail); ?>" required>
+        </div>
 
-        <?php if ($success): ?>
-            <p class="success-message"><?php echo htmlspecialchars($success); ?></p>
-        <?php endif; ?>
+        <div class="form-group">
+            <label>Nouveau mot de passe (laisser vide pour ne pas changer):</label>
+            <input type="password" name="password">
+        </div>
 
-        <form method="post">
-            <div class="form-group">
-                <label>Nouvel email:</label>
-                <input type="email" name="email" value="<?php echo htmlspecialchars($currentEmail); ?>" required>
-            </div>
+        <div class="form-group">
+            <label>Confirmer mot de passe:</label>
+            <input type="password" name="confirm">
+        </div>
 
-            <div class="form-group">
-                <label>Nouveau mot de passe (laisser vide pour ne pas changer):</label>
-                <input type="password" name="password">
-            </div>
+        <button type="submit">Mettre à jour</button>
+    </form>
 
-            <div class="form-group">
-                <label>Confirmer mot de passe:</label>
-                <input type="password" name="confirm">
-            </div>
-
-            <button type="submit">Mettre à jour</button>
-        </form>
-
-        <a href="index.php" class="back-link">Retour</a>
-    </div>
-</body>
-
-</html>
+    <a href="index.php" class="back-link">Retour</a>
+</div>
+<?php require_once 'footer.php'; ?>

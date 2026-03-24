@@ -1,7 +1,9 @@
 <?php
-require_once 'header-logged.php';
 require_once 'functions.php';
 requireLogin();
+
+$title = 'Envoyer un fichier';
+require_once 'header-logged.php';
 
 $error = '';
 $success = '';
@@ -33,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $destination = $userFolder . '/' . $newFileName;
                 if (move_uploaded_file($file['tmp_name'], $destination)) {
-                    $metadata = [
+                    $metadata = array(
                         'id' => uniqid(),
                         'owner' => $userEmail,
                         'original_name' => $originalName,
@@ -41,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'reserved_to' => $reserved_to,
                         'downloads' => 0,
                         'upload_date' => date('Y-m-d H:i:s')
-                    ];
+                    );
                     $pdo = get_db_connection();
                     $stmt = $pdo->prepare("INSERT INTO files (filename, original_name, owner, reserved_to) VALUES (?, ?, ?, ?)");
                     $stmt->execute([$newFileName, $originalName, $userEmail, $reserved_to]);
@@ -54,57 +56,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
+<div class="container">
+    <h1>Envoyer un fichier</h1>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Envoyer un fichier</title>
-</head>
+    <?php if ($error): ?>
+        <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+    <?php endif; ?>
 
-<body>
-    <div class="container">
-        <h1>Envoyer un fichier</h1>
+    <?php if ($success): ?>
+        <p class="success-message"><?php echo htmlspecialchars($success); ?></p>
+    <?php endif; ?>
 
-        <?php if ($error): ?>
-            <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
-        <?php endif; ?>
-
-        <?php if ($success): ?>
-            <p class="success-message"><?php echo htmlspecialchars($success); ?></p>
-        <?php endif; ?>
-
-        <form method="post" enctype="multipart/form-data" class="upload-form">
-            <div class="form-group">
-                <div class="file-input-wrapper">
-                    <label class="file-input-label">
-                        📁 Choisir un fichier (max 20 Mo)
-                        <input type="file" name="file" required>
-                    </label>
-                </div>
+    <form method="post" enctype="multipart/form-data" class="upload-form">
+        <div class="form-group">
+            <div class="file-input-wrapper">
+                <label class="file-input-label">
+                    📁 Choisir un fichier (max 20 Mo)
+                    <input type="file" name="file" required>
+                </label>
             </div>
+        </div>
 
-            <div class="form-group">
-                <label>Réserver le téléchargement à (email, optionnel):</label>
-                <input type="email" name="reserved_to" placeholder="exemple@email.com">
-            </div>
+        <div class="form-group">
+            <label>Réserver le téléchargement à (email, optionnel):</label>
+            <input type="email" name="reserved_to" placeholder="exemple@email.com">
+        </div>
 
-            <button type="submit" class="upload-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-upload">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                Envoyer le fichier
-            </button>
-        </form>
+        <button type="submit" class="upload-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-upload">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Envoyer le fichier
+        </button>
+    </form>
 
-        <p class="upload-info">Formats autorisés : tous sauf .php • Taille max : 20 Mo</p>
+    <p class="upload-info">Formats autorisés : tous sauf .php • Taille max : 20 Mo</p>
 
-        <a href="index.php" class="back-link">Retour à l'accueil</a>
-    </div>
-</body>
-
-</html>
+    <a href="index.php" class="back-link">Retour à l'accueil</a>
+</div>
+<?php require_once 'footer.php'; ?>

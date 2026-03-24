@@ -1,6 +1,8 @@
 <?php
-require_once 'header.php';
 require_once 'functions.php';
+
+$title = 'Se connecter';
+require_once 'header.php';
 if (session_status() === PHP_SESSION_NONE)
     session_start();
 
@@ -19,31 +21,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
+<div class="container">
+    <h1>Se connecter</h1>
+    <?php if ($error): ?>
+        <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
+    <?php endif; ?>
+    <form method="post">
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label>Mot de passe:</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit">Se connecter</button>
+    </form>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Se connecter</title>
-</head>
-
-<body>
-    <div class="container">
-        <h1>Se connecter</h1>
-        <?php if ($error): ?>
-            <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
-        <?php endif; ?>
-        <form method="post">
-            <div class="form-group">
-                <label>Email:</label>
-                <input type="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label>Mot de passe:</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit">Se connecter</button>
-        </form>
-
-    </div>
-    <?php require_once 'footer.php'; ?>
+</div>
+<?php require_once 'footer.php'; ?>
