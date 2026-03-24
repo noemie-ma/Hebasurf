@@ -28,9 +28,8 @@ function requireLogin()
         session_start();
     }
 
-    // Si l'email n'est pas en session, on redirige vers le login
     if (!isset($_SESSION['user_email'])) {
-        header('Location: login.php');
+        header('Location: /login.php');
         exit;
     }
 }
