@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?> Hebasurf </title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="api/styles.css">
 </head>
 
 <body>
@@ -16,3 +16,4 @@
             <a href="inscription.php" class="nav-link">S'inscrire</a>
         </nav>
     </header>
+</body>
