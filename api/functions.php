@@ -4,6 +4,26 @@ define('USERS_FILE', __DIR__ . '/data/users.json');
 define('FILES_FILE', __DIR__ . '/data/files.json');
 define('UPLOADS_DIR', __DIR__ . '/uploads');
 
+function get_db_connection()
+{
+    $host = getenv('POSTGRES_HOST');
+    $db = getenv('POSTGRES_DATABASE');
+    $user = getenv('POSTGRES_USER');
+    $pass = getenv('POSTGRES_PASSWORD');
+
+    // Le port est 5432 par défaut pour Postgres
+    $dsn = "pgsql:host=$host;port=5432;dbname=$db;sslmode=require";
+
+    try {
+        return new PDO($dsn, $user, $pass, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]);
+    } catch (PDOException $e) {
+        die("Erreur de connexion : " . $e->getMessage());
+    }
+}
+
 // Création des dossiers de données et d’uploads si nécessaire
 if (!file_exists(__DIR__ . '/data')) {
     mkdir(__DIR__ . '/data', 0755, true);

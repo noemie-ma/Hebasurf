@@ -8,6 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
 
+    $pdo = get_db_connection();
+
     if (!$email) {
         $error = "Adresse email invalide.";
     } elseif ($password !== $confirm) {
