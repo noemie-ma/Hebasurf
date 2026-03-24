@@ -8,8 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = trim($_POST['password']);
     $confirm = trim($_POST['confirm']);
 
-    $pdo = get_db_connection();
-
     if (!$email) {
         $error = "Adresse email invalide.";
     } elseif ($password !== $confirm) {
@@ -19,19 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = "Cette adresse email est déjà utilisée.";
         } else {
             $hashed = password_hash($password, PASSWORD_DEFAULT);
-            $users = getUsers();
-            $users[] = [
-                'email' => $email,
-                'password' => $hashed,
-                'created_at' => date('Y-m-d H:i:s')
-            ];
-            saveUsers($users);
-            // Création du dossier d’uploads de l’utilisateur
-            $userFolder = generateUserFolder($email);
-            if (!file_exists($userFolder)) {
-                mkdir($userFolder, 0755, true);
-            }
-            header('Location: login.php');
+            $pdo = get_db_connection();
+            $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (?, ?)");
+            $stmt->execute([strtolower($email), $hashed]);
+
+            header('Location: login.php?success=1');
             exit;
         }
     }

@@ -1,17 +1,14 @@
 <?php
-
-define('USERS_FILE', __DIR__ . '/data/users.json');
-define('FILES_FILE', __DIR__ . '/data/files.json');
+// Definition d'une constantes pour les fichiers enregistrés
 define('UPLOADS_DIR', __DIR__ . '/uploads');
 
+// Connexion à la database sur Vercel
 function get_db_connection()
 {
     $host = getenv('POSTGRES_HOST');
     $db = getenv('POSTGRES_DATABASE');
     $user = getenv('POSTGRES_USER');
     $pass = getenv('POSTGRES_PASSWORD');
-
-    // Le port est 5432 par défaut pour Postgres
     $dsn = "pgsql:host=$host;port=5432;dbname=$db;sslmode=require";
 
     try {
@@ -23,132 +20,39 @@ function get_db_connection()
         die("Erreur de connexion : " . $e->getMessage());
     }
 }
-
-// Création des dossiers de données et d’uploads si nécessaire
-if (!file_exists(__DIR__ . '/data')) {
-    mkdir(__DIR__ . '/data', 0755, true);
-}
-if (!file_exists(UPLOADS_DIR)) {
-    mkdir(UPLOADS_DIR, 0755, true);
-}
-
-// Fonctions de gestion des utilisateurs
-function getUsers()
-{
-    if (!file_exists(USERS_FILE)) {
-        return [];
-    }
-    $json = file_get_contents(USERS_FILE);
-    $users = json_decode($json, true);
-    return is_array($users) ? $users : [];
-}
-
-function saveUsers($users)
-{
-    file_put_contents(USERS_FILE, json_encode($users, JSON_PRETTY_PRINT));
-}
-
-function findUserByEmail($email)
-{
-    $users = getUsers();
-    foreach ($users as $user) {
-        if (strtolower($user['email']) === strtolower($email)) {
-            return $user;
-        }
-    }
-    return null;
-}
-
-function updateUser($email, $newData)
-{
-    $users = getUsers();
-    foreach ($users as &$user) {
-        if (strtolower($user['email']) === strtolower($email)) {
-            $user = array_merge($user, $newData);
-            saveUsers($users);
-            return true;
-        }
-    }
-    return false;
-}
-
-// Fonctions de gestion des métadonnées de fichiers
-function getFiles()
-{
-    if (!file_exists(FILES_FILE)) {
-        return [];
-    }
-    $json = file_get_contents(FILES_FILE);
-    $files = json_decode($json, true);
-    return is_array($files) ? $files : [];
-}
-
-function saveFiles($files)
-{
-    file_put_contents(FILES_FILE, json_encode($files, JSON_PRETTY_PRINT));
-}
-
-function addFileMetadata($metadata)
-{
-    $files = getFiles();
-    $files[] = $metadata;
-    saveFiles($files);
-}
-
-function updateFileMetadata($fileId, $newData)
-{
-    $files = getFiles();
-    foreach ($files as &$file) {
-        if ($file['id'] === $fileId) {
-            $file = array_merge($file, $newData);
-            saveFiles($files);
-            return true;
-        }
-    }
-    return false;
-}
-
-function deleteFileMetadata($fileId)
-{
-    $files = getFiles();
-    foreach ($files as $index => $file) {
-        if ($file['id'] === $fileId) {
-            array_splice($files, $index, 1);
-            saveFiles($files);
-            return $file;
-        }
-    }
-    return false;
-}
-
-function getUserFiles($email)
-{
-    $files = getFiles();
-    $result = [];
-    foreach ($files as $file) {
-        // On affiche les fichiers dont l'utilisateur est propriétaire ou pour lesquels il est le destinataire réservé
-        if (strtolower($file['owner']) === strtolower($email) || (isset($file['reserved_to']) && strtolower($file['reserved_to']) === strtolower($email))) {
-            $result[] = $file;
-        }
-    }
-    return $result;
-}
-
-function generateUserFolder($email)
-{
-    return UPLOADS_DIR . '/' . md5(strtolower($email));
-}
-
-function isLoggedIn()
-{
-    return isset($_SESSION['user_email']);
-}
-
+// Fonction pour vérifier si l'utilisateur / utilisatrice est connecté
 function requireLogin()
 {
-    if (!isLoggedIn()) {
+    if (session_status() === PHP_SESSION_NONE)
+        session_start();
+    if (!isset($_SESSION['user_email'])) {
         header('Location: login.php');
         exit;
     }
 }
-?>
+
+// Fonction pour trouver l'utilisateur / utilisatrice par email
+function findUserByEmail($email)
+{
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([strtolower($email)]);
+    return $stmt->fetch();
+}
+
+// Récupéraation des fichiers mis en ligne par l'utilisateur / utilisatrice
+function getUserFiles($email)
+{
+    $pdo = get_db_connection();
+    $stmt = $pdo->prepare("SELECT * FROM files WHERE LOWER(owner) = ? OR LOWER(reserved_to) = ?");
+    $stmt->execute([strtolower($email), strtolower($email)]);
+    return $stmt->fetchAll();
+}
+
+// Génère le chemin du dossier utilisateur à partir de son email
+function generateUserFolder($email)
+{
+    $safe = preg_replace('/[^a-z0-9._-]/i', '_', strtolower(trim($email)));
+    $folder = UPLOADS_DIR . '/' . $safe;
+    return $folder;
+}

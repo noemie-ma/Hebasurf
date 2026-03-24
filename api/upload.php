@@ -42,7 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'downloads' => 0,
                         'upload_date' => date('Y-m-d H:i:s')
                     ];
-                    addFileMetadata($metadata);
+                    $pdo = get_db_connection();
+                    $stmt = $pdo->prepare("INSERT INTO files (filename, original_name, owner, reserved_to) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$newFileName, $originalName, $userEmail, $reserved_to]);
                     $success = "Fichier envoyé avec succès.";
                 } else {
                     $error = "Erreur lors du déplacement du fichier.";

@@ -1,22 +1,21 @@
 <?php
 require_once 'header.php';
 require_once 'functions.php';
+if (session_status() === PHP_SESSION_NONE)
+    session_start();
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL);
     $password = trim($_POST['password']);
-    if (!$email) {
-        $error = "Adresse email invalide.";
+
+    $user = findUserByEmail($email);
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user_email'] = $user['email'];
+        header('Location: index.php');
+        exit;
     } else {
-        $user = findUserByEmail($email);
-        if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_email'] = $user['email'];
-            header('Location: index.php');
-            exit;
-        } else {
-            $error = "Identifiants incorrects.";
-        }
+        $error = "Identifiants incorrects.";
     }
 }
 ?>
